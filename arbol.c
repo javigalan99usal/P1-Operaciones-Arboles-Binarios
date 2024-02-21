@@ -180,29 +180,62 @@ int numHijoUnico(Arbol raiz)
 //
 Arbol buscarMax(Arbol raiz)
 {
-  if (raiz != NULL)
+  if (raiz == NULL)
   {
-    Arbol ar_izq = buscarMax(raiz->izq);
-    Arbol ar_der = buscarMax(raiz->der);
-    if (ar_izq == NULL && ar_der == NULL)
-      return raiz;
-    else if (ar_izq == NULL && ar_der != NULL && ar_der->info > raiz->info)
-      return ar_der;
-    else if (ar_der == NULL && ar_izq != NULL && ar_izq->info > raiz->info)
-      return ar_izq;
-    else if (ar_izq->info > ar_der->info)
-      if (ar_izq->info > raiz->info)
-        return ar_izq;
-      else
-        return raiz;
-    else if (ar_der->info > raiz->info)
-      return ar_der;
-    else
-      return raiz;
+    return NULL;
   }
   else
   {
-    return NULL;
+    Arbol ar_izq = buscarMax(raiz->izq);
+    Arbol ar_der = buscarMax(raiz->der);
+    if (ar_izq == NULL && ar_der == NULL) // Si no tiene hijos
+    {
+      return raiz;
+    }
+    if (ar_izq != NULL && ar_der == NULL) // Si solo tiene hijo izquierdo
+    {
+      if (ar_izq->info > raiz->info)
+      {
+        return ar_izq;
+      }
+      else
+      {
+        return raiz;
+      }
+    }
+    if (ar_der != NULL && ar_izq == NULL) // Si solo tiene hijo derecho
+    {
+      if (ar_der->info > raiz->info)
+      {
+        return ar_der;
+      }
+      else
+      {
+        return raiz;
+      }
+    }
+    if (ar_izq->info > ar_der->info) // Si tiene dos hijos y el izquierdo es mayor que el derecho
+    {
+      if (ar_izq->info > raiz->info)
+      {
+        return ar_izq;
+      }
+      else
+      {
+        return raiz;
+      }
+    }
+    else // Si tiene dos hijos y el derecho es menor que el izquierdo
+    {
+      if (ar_der->info > raiz->info)
+      {
+        return ar_der;
+      }
+      else
+      {
+        return raiz;
+      }
+    }
   }
 }
 //
@@ -210,35 +243,37 @@ Arbol buscarMax(Arbol raiz)
 //
 Arbol buscarMin(Arbol raiz)
 {
-  if (raiz != NULL)
+  if (raiz == NULL)
   {
-    printf(" -Raiz (%c) no es nula\n", raiz->info);
+    return NULL;
+  }
+  else
+  {
     Arbol ar_izq = buscarMin(raiz->izq);
     Arbol ar_der = buscarMin(raiz->der);
     if (ar_izq == NULL && ar_der == NULL) // Si no tiene hijos
     {
-      printf("  -Sin hijos: devuelvo raiz (%c)\n", raiz->info);
       return raiz;
     }
     if (ar_izq != NULL && ar_der == NULL) // Si solo tiene hijo izquierdo
     {
-      if(ar_izq->info < raiz->info){
-        printf("  -Devuelvo hijo izquierdo por falta de hijo derecho y comparando con raiz(%c)\n", ar_izq->info);
+      if (ar_izq->info < raiz->info)
+      {
         return ar_izq;
       }
-      else{
-        printf("  -Devuelvo raiz al comparar con izquierdo sin hijo derecho(%c)\n", raiz->info);
+      else
+      {
         return raiz;
       }
     }
     if (ar_der != NULL && ar_izq == NULL) // Si solo tiene hijo derecho
     {
-      if(ar_der->info < raiz->info){
-        printf("  -Devuelvo hijo derecho por falta de hijo izquierdo y comparando con raiz(%c)\n", ar_der->info);
+      if (ar_der->info < raiz->info)
+      {
         return ar_der;
       }
-      else{
-        printf("  -Devuelvo raiz al comparar con derecho sin hijo izquierdo(%c)\n", raiz->info);
+      else
+      {
         return raiz;
       }
     }
@@ -246,12 +281,10 @@ Arbol buscarMin(Arbol raiz)
     {
       if (ar_izq->info < raiz->info)
       {
-        printf("  -Devuelvo hijo izquierdo al comparar con derecho y raiz(%c)\n", ar_izq->info);
         return ar_izq;
       }
       else
       {
-        printf("  -Devuelvo raiz al comparar con derecho e izquierdo 1 (%c)\n", raiz->info);
         return raiz;
       }
     }
@@ -259,19 +292,12 @@ Arbol buscarMin(Arbol raiz)
     {
       if (ar_der->info < raiz->info)
       {
-        printf("  -Devuelvo hijo derecho al comparar con izquierdo y raiz(%c)\n", ar_der->info);
         return ar_der;
       }
       else
       {
-        printf("  -Devuelvo raiz al comparar con derecho e izquierdo 2 (%c)\n", raiz->info);
         return raiz;
       }
     }
-  }
-  else
-  {
-    printf(" -Raiz nula\n");
-    return NULL;
   }
 }
