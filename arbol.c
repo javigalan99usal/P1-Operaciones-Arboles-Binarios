@@ -181,62 +181,18 @@ int numHijoUnico(Arbol raiz)
 Arbol buscarMax(Arbol raiz)
 {
   if (raiz == NULL)
-  {
     return NULL;
-  }
-  else
-  {
-    Arbol ar_izq = buscarMax(raiz->izq);
-    Arbol ar_der = buscarMax(raiz->der);
-    if (ar_izq == NULL && ar_der == NULL) // Si no tiene hijos
-    {
-      return raiz;
-    }
-    if (ar_izq != NULL && ar_der == NULL) // Si solo tiene hijo izquierdo
-    {
-      if (ar_izq->info > raiz->info)
-      {
-        return ar_izq;
-      }
-      else
-      {
-        return raiz;
-      }
-    }
-    if (ar_der != NULL && ar_izq == NULL) // Si solo tiene hijo derecho
-    {
-      if (ar_der->info > raiz->info)
-      {
-        return ar_der;
-      }
-      else
-      {
-        return raiz;
-      }
-    }
-    if (ar_izq->info > ar_der->info) // Si tiene dos hijos y el izquierdo es mayor que el derecho
-    {
-      if (ar_izq->info > raiz->info)
-      {
-        return ar_izq;
-      }
-      else
-      {
-        return raiz;
-      }
-    }
-    else // Si tiene dos hijos y el derecho es menor que el izquierdo
-    {
-      if (ar_der->info > raiz->info)
-      {
-        return ar_der;
-      }
-      else
-      {
-        return raiz;
-      }
-    }
-  }
+
+  Arbol max = raiz;
+  Arbol max_izq = buscarMax(raiz->izq);
+  Arbol max_der = buscarMax(raiz->der);
+
+  if (max_izq != NULL && max_izq->info > max->info)
+    max = max_izq;
+  if (max_der != NULL && max_der->info > max->info)
+    max = max_der;
+
+  return max;
 }
 //
 // Búsqueda del nodo con el valor mínimo de un árbol binario sin ordenar
@@ -244,60 +200,58 @@ Arbol buscarMax(Arbol raiz)
 Arbol buscarMin(Arbol raiz)
 {
   if (raiz == NULL)
-  {
     return NULL;
-  }
-  else
+
+  Arbol min = raiz;
+  Arbol min_izq = buscarMin(raiz->izq);
+  Arbol min_der = buscarMin(raiz->der);
+
+  if (min_izq != NULL && min_izq->info < min->info)
+    min = min_izq;
+  if (min_der != NULL && min_der->info < min->info)
+    min = min_der;
+
+  return min;
+}
+//
+// Comparación de dos árboles binarios
+//
+int similares(Arbol r1, Arbol r2)
+{
+  if (r1 == NULL && r2 == NULL) // Si ambos son nulos, son similares
   {
-    Arbol ar_izq = buscarMin(raiz->izq);
-    Arbol ar_der = buscarMin(raiz->der);
-    if (ar_izq == NULL && ar_der == NULL) // Si no tiene hijos
-    {
-      return raiz;
-    }
-    if (ar_izq != NULL && ar_der == NULL) // Si solo tiene hijo izquierdo
-    {
-      if (ar_izq->info < raiz->info)
-      {
-        return ar_izq;
-      }
-      else
-      {
-        return raiz;
-      }
-    }
-    if (ar_der != NULL && ar_izq == NULL) // Si solo tiene hijo derecho
-    {
-      if (ar_der->info < raiz->info)
-      {
-        return ar_der;
-      }
-      else
-      {
-        return raiz;
-      }
-    }
-    if (ar_izq->info < ar_der->info) // Si tiene dos hijos y el izquierdo es menor que el derecho
-    {
-      if (ar_izq->info < raiz->info)
-      {
-        return ar_izq;
-      }
-      else
-      {
-        return raiz;
-      }
-    }
-    else // Si tiene dos hijos y el derecho es menor que el izquierdo
-    {
-      if (ar_der->info < raiz->info)
-      {
-        return ar_der;
-      }
-      else
-      {
-        return raiz;
-      }
-    }
+    return 1;
   }
+  if (r1 != NULL && r2 != NULL) // Si ambos no son nulos comprobamos recursivamente
+  {
+    return similares(r1->izq, r2->izq) && similares(r1->der, r2->der);
+  }
+  return 0; // Si uno es nulo y el otro, no no son similares
+}
+//
+// Comprobación de dos árboles binarios equivalentes
+//
+int equivalentes(Arbol r1, Arbol r2)
+{
+  if (r1 == NULL && r2 == NULL) // Si ambos son nulos, son equivalentes
+  {
+    return 1;
+  }
+  if (r1 != NULL && r2 != NULL) // Si ambos no son nulos comprobamos recursivamente
+  {
+    return r1->info == r2->info && equivalentes(r1->izq, r2->izq) && equivalentes(r1->der, r2->der);
+  }
+  return 0; // Si uno es nulo y el otro, no no son equivalentes
+}
+//
+// Creación de un árbol binario especular
+//
+Arbol especular(Arbol raiz)
+{
+  if (raiz == NULL)
+    return NULL;
+  Arbol nuevo = creaNodo(raiz->info);
+  nuevo->izq = especular(raiz->der);
+  nuevo->der = especular(raiz->izq);
+  return nuevo;
 }
